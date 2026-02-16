@@ -27,6 +27,17 @@ body {
   text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
 }
 
+/* 件数表示 */
+.request-count {
+  position: fixed;
+  top: 80px;
+  left: 45px;
+  font-size: 14px;
+  color: #f4ecd8;
+  letter-spacing: 2px;
+  text-shadow: 1px 1px 6px rgba(0,0,0,0.7);
+}
+
 /* 中央カード */
 .container {
   display: flex;
@@ -106,46 +117,25 @@ button:hover {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* 右側リンクエリア */
-.side-links {
+/* 右側注意書き */
+.side-note {
   position: fixed;
-  top: 130px;
-  right: 30px;
-  width: 240px;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-/* 本の背表紙風 */
-.link-box {
+  top: 140px;
+  right: 40px;
+  width: 260px;
   background: #f4ecd8;
-  padding: 20px;
-  border-left: 10px solid #7a5c3e;
+  padding: 25px;
   box-shadow: 0 12px 30px rgba(0,0,0,0.4);
-  transition: 0.2s;
-}
-
-.link-box:hover {
-  transform: translateY(-4px);
-}
-
-.link-title {
+  border-left: 8px solid #7a5c3e;
   font-size: 14px;
-  margin-bottom: 10px;
+  line-height: 1.8;
   color: #5e4630;
-  letter-spacing: 1px;
 }
 
-.link-box a {
-  text-decoration: none;
-  color: #b22222;
-  font-weight: bold;
+.side-note-title {
   font-size: 15px;
-}
-
-.link-box a:hover {
-  text-decoration: underline;
+  margin-bottom: 12px;
+  letter-spacing: 2px;
 }
 </style>
 </head>
@@ -153,22 +143,184 @@ button:hover {
 <body>
 
 <div class="site-title">📚 アウクの選曲書庫</div>
+<div class="request-count" id="requestCount">現在の搬入冊数：読み込み中…</div>
 
-<!-- 右側リンク -->
-<div class="side-links">
-  <div class="link-box">
-    <div class="link-title">🎥 私のYouTubeチャンネル</div>
-    <a href="www.youtube.com/@auku.taikobaka" target="_blank">
-      チャンネルはこちら
-    </a>
-  </div>
+<!-- 右側 注意書き -->
+<div class="side-note">
+  <div class="side-note-title">【ご利用案内】</div>
+  ・曲名、要望どうりにならない可能性がございますが、譜面傾向、難易度を書いてくれればそれを元に制作します。<br>
+  ・Youtube上に曲単体の動画が無ければリクエストが却下される可能性があります。<br>
+  ・すべての曲が選曲されるとは限りません。<br>
+  ・いつも見てくれたりコメントしてくれてる人はもしかしたらちょっと優先するかも…？
+</div>
 
-  <div class="link-box">
-    <div class="link-title">🌐 譜面配布部屋</div>
-    <a href="ux.getuploader.com/AUK_TAIKOBAKA” target="_blank">
-      サイトはこちら
-    </a>
+<div class="container">
+  <div class="library-card">
+    <div class="subtitle">という名のただのリクエスト用サイト。</div>
+
+    <input type="text" id="song" placeholder="ここにリクエスト曲">
+
+    <button onclick="send()">送信</button>
+
+    <div class="bookmark" id="bookmark"></div>
   </div>
+</div>
+
+<script>
+const GAS_URL = "<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>アウクの選曲書庫</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+  background:
+    linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+    url("imgsrc.php.png") no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
+  color: #3b2f2f;
+}
+
+/* 左上タイトル */
+.site-title {
+  position: fixed;
+  top: 30px;
+  left: 40px;
+  font-size: 36px;
+  color: #f4ecd8;
+  letter-spacing: 4px;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+
+/* 件数表示 */
+.request-count {
+  position: fixed;
+  top: 80px;
+  left: 45px;
+  font-size: 14px;
+  color: #f4ecd8;
+  letter-spacing: 2px;
+  text-shadow: 1px 1px 6px rgba(0,0,0,0.7);
+}
+
+/* 中央カード */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.library-card {
+  background: #f4ecd8;
+  width: 520px;
+  padding: 55px 45px;
+  border-radius: 6px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 16px;
+  margin-bottom: 30px;
+  color: #6b5e4b;
+}
+
+/* 入力欄 */
+input {
+  width: 100%;
+  padding: 20px;
+  font-size: 18px;
+  border: 1px solid #b8a98c;
+  background: #fffdf7;
+  margin-bottom: 20px;
+  font-family: inherit;
+}
+
+/* ボタン */
+button {
+  width: 100%;
+  padding: 16px;
+  background: #7a5c3e;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  letter-spacing: 2px;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #5e4630;
+}
+
+/* しおり */
+.bookmark {
+  margin-top: 25px;
+  background: #b22222;
+  color: white;
+  padding: 14px;
+  font-size: 15px;
+  position: relative;
+  display: none;
+  animation: slideDown 0.4s ease;
+}
+
+.bookmark::after {
+  content: "";
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 14px 14px 0 14px;
+  border-style: solid;
+  border-color: #b22222 transparent transparent transparent;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 右側注意書き */
+.side-note {
+  position: fixed;
+  top: 140px;
+  right: 40px;
+  width: 260px;
+  background: #f4ecd8;
+  padding: 25px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+  border-left: 8px solid #7a5c3e;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #5e4630;
+}
+
+.side-note-title {
+  font-size: 15px;
+  margin-bottom: 12px;
+  letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="site-title">📚 アウクの選曲書庫</div>
+<div class="request-count" id="requestCount">現在の搬入冊数：読み込み中…</div>
+
+<!-- 右側 注意書き -->
+<div class="side-note">
+  <div class="side-note-title">【ご利用案内】</div>
+  ・曲名、要望どうりにならない可能性がございますが、譜面傾向、難易度を書いてくれればそれを元に制作します。<br>
+  ・Youtube上に曲単体の動画が無ければリクエストが却下される可能性があります。<br>
+  ・すべての曲が選曲されるとは限りません。<br>
+  ・いつも見てくれたりコメントしてくれてる人はもしかしたらちょっと優先するかも…？
 </div>
 
 <div class="container">
@@ -185,6 +337,23 @@ button:hover {
 
 <script>
 const GAS_URL = "https://script.google.com/macros/s/AKfycbyX9U7BuwH-SA2kQfJcG-hdUqSsS42dq9hcEJhe9Kt4DQV4cwpDwcQJRCJfgVKQsB6D/exec";
+
+/* 件数更新 */
+function updateCount(count) {
+  document.getElementById("requestCount").innerText =
+    "現在の搬入冊数：" + count + "冊";
+}
+
+/* ページ読み込み時に取得 */
+window.onload = function() {
+  fetch(GAS_URL)
+    .then(res => res.json())
+    .then(data => {
+      if (data.count !== undefined) {
+        updateCount(data.count);
+      }
+    });
+};
 
 function send() {
   const song = document.getElementById("song").value;
@@ -204,6 +373,64 @@ function send() {
   .then(data => {
     showBookmark("リクエスト曲が搬入されました、選曲されるのをお待ちください…_( ˙꒳​˙_ )。");
     document.getElementById("song").value = "";
+    if (data.count !== undefined) {
+      updateCount(data.count);
+    }
+  })
+  .catch(() => {
+    showBookmark("曲が搬入されませんでした、時間をおいてもう一回やったらいけるかも(´･ω･`)ｺﾞﾒﾝﾈ…。");
+  });
+}
+
+function showBookmark(text) {
+  const bookmark = document.getElementById("bookmark");
+  bookmark.innerText = text;
+  bookmark.style.display = "block";
+}
+</script>
+
+</body>
+</html>
+";
+
+/* 件数更新 */
+function updateCount(count) {
+  document.getElementById("requestCount").innerText =
+    "現在の搬入冊数：" + count + "冊";
+}
+
+/* ページ読み込み時に取得 */
+window.onload = function() {
+  fetch(GAS_URL)
+    .then(res => res.json())
+    .then(data => {
+      if (data.count !== undefined) {
+        updateCount(data.count);
+      }
+    });
+};
+
+function send() {
+  const song = document.getElementById("song").value;
+
+  if (!song.trim()) {
+    showBookmark("曲名は…(･ω･三･ω･)？。");
+    return;
+  }
+
+  showBookmark("少々お待ちを…");
+
+  fetch(GAS_URL, {
+    method: "POST",
+    body: JSON.stringify({ song: song })
+  })
+  .then(res => res.json())
+  .then(data => {
+    showBookmark("リクエスト曲が搬入されました、選曲されるのをお待ちください…_( ˙꒳​˙_ )。");
+    document.getElementById("song").value = "";
+    if (data.count !== undefined) {
+      updateCount(data.count);
+    }
   })
   .catch(() => {
     showBookmark("曲が搬入されませんでした、時間をおいてもう一回やったらいけるかも(´･ω･`)ｺﾞﾒﾝﾈ…。");
