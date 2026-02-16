@@ -115,16 +115,16 @@
     <div class="library-card">
       <div class="subtitle">という名のただのリクエスト用サイト。</div>
 
-      <input type="text" id="song" placeholder="贈りたい曲名を記してください">
+      <input type="text" id="song" placeholder="ここにリクエスト曲">
 
-      <button onclick="send()">リクエスト曲はここ</button>
+      <button onclick="send()">送信</button>
 
       <div class="bookmark" id="bookmark"></div>
     </div>
   </div>
 
   <script>
-    const GAS_URL = "ここにあなたのWebアプリURL";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyX9U7BuwH-SA2kQfJcG-hdUqSsS42dq9hcEJhe9Kt4DQV4cwpDwcQJRCJfgVKQsB6D/exec";
 
     function send() {
       const song = document.getElementById("song").value;
