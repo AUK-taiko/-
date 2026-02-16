@@ -5,49 +5,70 @@
   <title>アウクの選曲書庫</title>
 
   <style>
-  body {
-  margin: 0;
-  font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
-  background: url("imgsrc.php.png") no-repeat center center fixed;
-  background-size: cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  color: #3b2f2f;
-}
+    body {
+      margin: 0;
+      font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+      background: 
+        linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+        url("imgsrc.php.png") no-repeat center center fixed;
+      background-size: cover;
+      height: 95vh;
+      color: #3b2f2f;
+    }
 
-    h1 {
-      margin: 0 0 10px 0;
-      font-size: 22px;
-      letter-spacing: 2px;
+    /* 左上タイトル */
+    .site-title {
+      position: fixed;
+      top: 30px;
+      left: 40px;
+      font-size: 32px;
+      color: #f4ecd8;
+      letter-spacing: 4px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .library-card {
+      background: #f4ecd8;
+      width: 500px;
+      padding: 50px 40px;
+      border-radius: 6px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      text-align: center;
     }
 
     .subtitle {
-      font-size: 13px;
-      margin-bottom: 25px;
+      font-size: 16px;
+      margin-bottom: 30px;
       color: #6b5e4b;
     }
 
+    /* 入力欄を大きく */
     input {
       width: 100%;
-      padding: 12px;
+      padding: 18px;
+      font-size: 18px;
       border: 1px solid #b8a98c;
       background: #fffdf7;
-      font-size: 14px;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       font-family: inherit;
     }
 
     button {
       width: 100%;
-      padding: 12px;
+      padding: 15px;
       background: #7a5c3e;
       color: white;
       border: none;
       cursor: pointer;
-      font-size: 14px;
-      letter-spacing: 1px;
+      font-size: 16px;
+      letter-spacing: 2px;
       transition: 0.2s;
     }
 
@@ -55,13 +76,13 @@
       background: #5e4630;
     }
 
-    /* しおり風メッセージ */
+    /* しおり */
     .bookmark {
-      margin-top: 20px;
-      background: #d64545;
+      margin-top: 25px;
+      background: #b22222;
       color: white;
-      padding: 12px;
-      font-size: 13px;
+      padding: 14px;
+      font-size: 15px;
       position: relative;
       display: none;
       animation: slideDown 0.4s ease;
@@ -70,12 +91,12 @@
     .bookmark::after {
       content: "";
       position: absolute;
-      bottom: -12px;
+      bottom: -14px;
       left: 50%;
       transform: translateX(-50%);
-      border-width: 12px 12px 0 12px;
+      border-width: 14px 14px 0 14px;
       border-style: solid;
-      border-color: #d64545 transparent transparent transparent;
+      border-color: #b22222 transparent transparent transparent;
     }
 
     @keyframes slideDown {
@@ -88,23 +109,25 @@
 
 <body>
 
-  <div class="library-card">
-    <h1>アウクの選曲書庫</h1>
-    <div class="subtitle">という名のただのリクエストを送るサイト。</div>
+  <div class="site-title">📚 アウクの選曲書庫</div>
 
-    <input type="text" id="song" placeholder="リクエストしたい曲名を記してください">
+  <div class="container">
+    <div class="library-card">
+      <div class="subtitle">あなたの一曲を、この書庫へ。</div>
 
-    <button onclick="send()">書庫へ納める</button>
+      <input type="text" id="song" placeholder="贈りたい曲名を記してください">
 
-    <div class="bookmark" id="bookmark"></div>
+      <button onclick="send()">書庫へ納める</button>
+
+      <div class="bookmark" id="bookmark"></div>
+    </div>
   </div>
 
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbyX9U7BuwH-SA2kQfJcG-hdUqSsS42dq9hcEJhe9Kt4DQV4cwpDwcQJRCJfgVKQsB6D/exec";
+    const GAS_URL = "ここにあなたのWebアプリURL";
 
     function send() {
       const song = document.getElementById("song").value;
-      const bookmark = document.getElementById("bookmark");
 
       if (!song.trim()) {
         showBookmark("曲名が記されておりません。");
@@ -119,11 +142,11 @@
       })
       .then(res => res.json())
       .then(data => {
-        showBookmark("📖 しおりを挟みました。選曲をお待ちください_( ˙꒳​˙_ )。");
+        showBookmark("📖 しおりを挟みました。選曲をお待ちください。");
         document.getElementById("song").value = "";
       })
       .catch(() => {
-        showBookmark("書庫への納入に失敗しました。時間を置いてもう一回試すといいかも…(´･ω･`)ｺﾞﾒﾝﾈ…。");
+        showBookmark("書庫への納入に失敗しました。");
       });
     }
 
@@ -136,4 +159,3 @@
 
 </body>
 </html>
-
