@@ -113,11 +113,11 @@
 
   <div class="container">
     <div class="library-card">
-      <div class="subtitle">あなたの一曲を、この書庫へ。</div>
+      <div class="subtitle">という名のただのリクエスト用サイト。</div>
 
       <input type="text" id="song" placeholder="贈りたい曲名を記してください">
 
-      <button onclick="send()">書庫へ納める</button>
+      <button onclick="send()">リクエスト曲はここ</button>
 
       <div class="bookmark" id="bookmark"></div>
     </div>
@@ -130,11 +130,11 @@
       const song = document.getElementById("song").value;
 
       if (!song.trim()) {
-        showBookmark("曲名が記されておりません。");
+        showBookmark("曲名は…(･ω･三･ω･)？。");
         return;
       }
 
-      showBookmark("書庫へ納めています...");
+      showBookmark("少々お待ちを…");
 
       fetch(GAS_URL, {
         method: "POST",
@@ -142,11 +142,11 @@
       })
       .then(res => res.json())
       .then(data => {
-        showBookmark("📖 しおりを挟みました。選曲をお待ちください。");
+        showBookmark("リクエスト曲が搬入されました、選曲されるのをお待ちください…_( ˙꒳​˙_ )。");
         document.getElementById("song").value = "";
       })
       .catch(() => {
-        showBookmark("書庫への納入に失敗しました。");
+        showBookmark("曲が搬入されませんでした、時間をおいてもう一回やったらいけるかも(´･ω･`)ｺﾞﾒﾝﾈ…。");
       });
     }
 
