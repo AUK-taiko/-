@@ -2,15 +2,15 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>曲を贈る</title>
+  <title>アウクの選曲書庫</title>
 </head>
 <body>
-  <h1>アウクに曲を贈る</h1>
+  <h1>新しい曲を送る</h1>
   <input type="text" id="song" placeholder="曲名を入力">
   <button onclick="send()">送信</button>
 
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbzuDtxlK2kG1va2BbIrFgtJCuafxQeQCCYmwVpDIU48dozX-fq3MyIheeamEINBkd-P/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyX9U7BuwH-SA2kQfJcG-hdUqSsS42dq9hcEJhe9Kt4DQV4cwpDwcQJRCJfgVKQsB6D/exec";
 
     function send() {
       const song = document.getElementById("song").value;
