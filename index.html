@@ -2,77 +2,110 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>アウクに曲を贈る</title>
+  <title>アウクの選曲書庫</title>
 
   <style>
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: linear-gradient(135deg, #1e1e2f, #2b2b45);
-      color: white;
+      font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+      background: linear-gradient(135deg, #5b4636, #2f241c);
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      color: #3b2f2f;
     }
 
-    .card {
-      background: rgba(255, 255, 255, 0.08);
-      padding: 40px;
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-      width: 320px;
+    .library-card {
+      background: #f4ecd8;
+      width: 360px;
+      padding: 40px 30px;
+      border-radius: 6px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
       text-align: center;
+      position: relative;
     }
 
     h1 {
-      margin-bottom: 20px;
+      margin: 0 0 10px 0;
       font-size: 22px;
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      margin-bottom: 25px;
+      color: #6b5e4b;
     }
 
     input {
       width: 100%;
       padding: 12px;
-      border-radius: 10px;
-      border: none;
-      margin-bottom: 15px;
+      border: 1px solid #b8a98c;
+      background: #fffdf7;
       font-size: 14px;
+      margin-bottom: 15px;
+      font-family: inherit;
     }
 
     button {
       width: 100%;
       padding: 12px;
-      border-radius: 10px;
-      border: none;
-      background: #6c63ff;
+      background: #7a5c3e;
       color: white;
-      font-size: 15px;
+      border: none;
       cursor: pointer;
+      font-size: 14px;
+      letter-spacing: 1px;
       transition: 0.2s;
     }
 
     button:hover {
-      background: #574fd6;
+      background: #5e4630;
     }
 
-    .message {
-      margin-top: 15px;
-      font-size: 14px;
-      opacity: 0.9;
+    /* しおり風メッセージ */
+    .bookmark {
+      margin-top: 20px;
+      background: #d64545;
+      color: white;
+      padding: 12px;
+      font-size: 13px;
+      position: relative;
+      display: none;
+      animation: slideDown 0.4s ease;
     }
+
+    .bookmark::after {
+      content: "";
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 12px 12px 0 12px;
+      border-style: solid;
+      border-color: #d64545 transparent transparent transparent;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <h1>🎵 アウクに曲を贈る</h1>
 
-    <input type="text" id="song" placeholder="曲名を入力してください">
+  <div class="library-card">
+    <h1>アウクの選曲書庫</h1>
+    <div class="subtitle">という名のただのリクエストを送るサイト。</div>
 
-    <button onclick="send()">送信する</button>
+    <input type="text" id="song" placeholder="リクエストしたい曲名を記してください">
 
-    <div class="message" id="message"></div>
+    <button onclick="send()">書庫へ納める</button>
+
+    <div class="bookmark" id="bookmark"></div>
   </div>
 
   <script>
@@ -80,14 +113,14 @@
 
     function send() {
       const song = document.getElementById("song").value;
-      const message = document.getElementById("message");
+      const bookmark = document.getElementById("bookmark");
 
       if (!song.trim()) {
-        message.innerText = "新しい曲を知りたいです。";
+        showBookmark("曲名が記されておりません。");
         return;
       }
 
-      message.innerText = "送信中...";
+      showBookmark("書庫へ納めています...");
 
       fetch(GAS_URL, {
         method: "POST",
@@ -95,13 +128,21 @@
       })
       .then(res => res.json())
       .then(data => {
-        message.innerText = data.status;
+        showBookmark("📖 しおりを挟みました。選曲をお待ちください_( ˙꒳​˙_ )。");
         document.getElementById("song").value = "";
       })
       .catch(() => {
-        message.innerText = "送信できませんでした、時間をおいてみたら成功するかも(´･ω･`)ｺﾞﾒﾝﾈ…。";
+        showBookmark("書庫への納入に失敗しました。時間を置いてもう一回試すといいかも…(´･ω･`)ｺﾞﾒﾝﾈ…。");
       });
     }
+
+    function showBookmark(text) {
+      const bookmark = document.getElementById("bookmark");
+      bookmark.innerText = text;
+      bookmark.style.display = "block";
+    }
   </script>
+
 </body>
 </html>
+
