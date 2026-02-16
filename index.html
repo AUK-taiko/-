@@ -27,6 +27,24 @@
       text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
     }
 
+<!-- 右側リンクエリア -->
+<div class="side-links">
+  <div class="link-box">
+    <div class="link-title">🎥 Youtubeチャンネル</div>
+    <a href="hwww.youtube.com/@auku.taikobakaL" target="_blank">
+      チャンネルはこちら
+    </a>
+  </div>
+
+  <div class="link-box">
+    <div class="link-title">🌐 アウクの創作譜面配布部屋</div>
+    <a href="ux.getuploader.com/AUK_TAIKOBAKA" target="_blank">
+      サイトはこちら
+    </a>
+  </div>
+</div>
+
+    
     .container {
       display: flex;
       justify-content: center;
@@ -123,6 +141,46 @@
     </div>
   </div>
 
+  /* 右側リンクエリア */
+.side-links {
+  position: fixed;
+  top: 120px;
+  right: 30px;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* 書棚風ボックス */
+.link-box {
+  background: #f4ecd8;
+  padding: 18px;
+  border-left: 8px solid #7a5c3e;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  font-family: inherit;
+}
+
+/* タイトル */
+.link-title {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #5e4630;
+  letter-spacing: 1px;
+}
+
+/* リンク */
+.link-box a {
+  text-decoration: none;
+  color: #b22222;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.link-box a:hover {
+  text-decoration: underline;
+}
+  
   <script>
     const GAS_URL = "https://script.google.com/macros/s/AKfycbyX9U7BuwH-SA2kQfJcG-hdUqSsS42dq9hcEJhe9Kt4DQV4cwpDwcQJRCJfgVKQsB6D/exec";
 
